@@ -7,20 +7,41 @@
  * To make lasting changes to preferences, you will have to edit the user.js.
  */
 
-// You can identify the features I've disabled in Betterfox by searching for the [#$] keyword.
-
 /****************************************************************************
- * CLEANFOX                                                                 *
- * "zJohnWick"                                                              *
- * version: 2.0 (synced with Betterfox v152)                                *
- * url: https://github.com/zJohnWick/CLEANFOX-CONFIG                        *
+ * Betterfox                                                                *
+ * "Ad meliora"                                                             *
+ * version: 152                                                             *
+ * url: https://github.com/yokoffing/Betterfox                              *
 ****************************************************************************/
 
 /****************************************************************************
  * SECTION: FASTFOX                                                         *
 ****************************************************************************/
-user_pref("gfx.canvas.accelerated.cache-size", 256); // reset pref
-user_pref("gfx.webrender.layer-compositor", true);
+/** GENERAL ***/
+user_pref("gfx.content.skia-font-cache-size", 20);
+user_pref("content.notify.interval", 100000);
+
+/** GFX ***/
+user_pref("gfx.canvas.accelerated.cache-size", 512);
+
+/** JS ***/
+user_pref("javascript.options.baselinejit.threshold", 50);
+
+/** MEDIA CACHE ***/
+user_pref("media.cache_readahead_limit", 3600);
+user_pref("media.cache_resume_threshold", 1800);
+
+/** IMAGE CACHE ***/
+user_pref("image.mem.decode_bytes_at_a_time", 32768);
+
+/** NETWORKING ***/
+user_pref("network.buffer.cache.size", 65535);
+user_pref("network.buffer.cache.count", 48);
+user_pref("network.http.max-connections", 1800);
+user_pref("network.http.max-persistent-connections-per-server", 10);
+user_pref("network.http.max-urgent-start-excessive-connections-per-host", 5);
+user_pref("network.http.request.max-start-delay", 5);
+user_pref("network.dnsCacheExpiration", 3600);
 
 /****************************************************************************
  * SECTION: SECUREFOX                                                       *
@@ -174,7 +195,7 @@ user_pref("browser.newtabpage.activity-stream.showSponsored", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredCheckboxes", false);
 
 /** DOWNLOADS ***/
-// user_pref("browser.download.manager.addToRecentDocs", false); [CLEANFOX]
+user_pref("browser.download.manager.addToRecentDocs", false);
 
 /** PDF ***/
 user_pref("browser.download.open_pdf_attachments_inline", true);
@@ -182,41 +203,22 @@ user_pref("browser.download.open_pdf_attachments_inline", true);
 /** TAB BEHAVIOR ***/
 user_pref("browser.bookmarks.openInTabClosesMenu", false);
 user_pref("findbar.highlightAll", true);
-user_pref("browser.menu.showViewImageInfo", true);
-user_pref("layout.word_select.eat_space_to_next_word", false);
 
 /****************************************************************************
- * SECTION: CLEANFOX                                                        *
+ * SECTION: SMOOTHFOX                                                       *
 ****************************************************************************/
+// visit https://github.com/yokoffing/Betterfox/blob/main/Smoothfox.js
+// Enter your scrolling overrides below this line:
 
-// Personal Preferences-----------------------
-user_pref("ui.key.menuAccessKeyFocuses", false);
-
-// Ask for confirmation when closing a window with multiple tabs
-user_pref("browser.tabs.warnOnClose", false);
-
-// Disable address bar popping out
-user_pref("browser.urlbar.openViewOnFocus", false);
-
-// Disable tab previews when hovering over them
-user_pref("browser.tabs.hoverPreview.enabled", false);
-
-// Try Yourself-----------------------
-// PREF: disable all DRM content
-// user_pref("media.eme.enabled", false);
-
-// PREF: disable Firefox Sync
-// user_pref("identity.fxaccounts.enabled", false);
-// user_pref("dom.push.enabled", false);
-// user_pref("dom.push.connection.enabled", false);
-// user_pref("browser.tabs.firefox-view", false);
-
-// PREF: disable using the OS's geolocation service
-// user_pref("geo.provider.ms-windows-location", false); // [WINDOWS]
-// user_pref("geo.provider.use_corelocation", false); // [MAC]
-// user_pref("geo.provider.use_gpsd", false); // [LINUX] broken on Linux?
-// user_pref("geo.provider.use_geoclue", false); // [FF102+] [LINUX]
 
 /****************************************************************************
- * END CLEANFOX                                                             *
+ * START: MY OVERRIDES                                                      *
+****************************************************************************/
+// visit https://github.com/yokoffing/Betterfox/wiki/Common-Overrides
+// visit https://github.com/yokoffing/Betterfox/wiki/Optional-Hardening
+// Enter your personal overrides below this line:
+
+
+/****************************************************************************
+ * END: BETTERFOX                                                           *
 ****************************************************************************/

@@ -11,22 +11,22 @@ user.js for clean, fast, private Firefox.
 4) Move the `user.js` file into the folder.
 5) Done.
 
-## Difference with Betterfox Config.
-* Changed a few things in Betterfox.
+## Difference with Betterfox Config
 
-| Fox Type | Line # | Description | Status |
-| :---: | :---: | :---: | :---: |
-| `Peskyfox.js` | 274 | Pinned Shortcuts on New Tab | On |
-| `Securefox.js` | 192 | Battery status tracking | Off |
+CLEANFOX is Betterfox with a trimmed FASTFOX section, a few pref tweaks, and my own personal preferences appended. Full breakdown: **[docs/betterfox-vs-cleanfox.md](docs/betterfox-vs-cleanfox.md)**.
 
-* Following things added based on personal preference.
+Personal preferences added:
 
 | Code | Description |
 | :---: | --- |
-| `browser.urlbar.speculativeConnect.enabled` | Disable URL bar, making speculative connections |
 | `ui.key.menuAccessKeyFocuses` | Disable menu popping up when press ALT key |
 | `browser.tabs.warnOnClose` | Ask confirmation when closing a window with multiple tabs |
 | `browser.urlbar.openViewOnFocus` | Disable address bar popping out |
+| `browser.tabs.hoverPreview.enabled` | Disable tab previews when hovering over them |
+
+## Staying in sync with Betterfox
+
+`user.js` is generated from upstream Betterfox by `build.py`, which re-applies the CLEANFOX changes on top. A monthly GitHub Action ([`.github/workflows/sync.yml`](.github/workflows/sync.yml)) rebuilds it automatically; it can also be run on demand from the **Actions** tab, or locally with `python build.py`. Customizations live as constants at the top of `build.py`.
 
 ## Note
 > [!IMPORTANT]
