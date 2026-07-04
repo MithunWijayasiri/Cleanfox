@@ -1,63 +1,118 @@
 # CLEANFOX Firefox Config
-user.js for clean, fast, private Firefox.
-- Tested this user.js on Firefox, Firefox Nightly, Firefox ESR.
 
-## Getting started
-*If you don't have firefox already: [Get Firefox](https://www.mozilla.org/en-US/firefox/all/#product-desktop-release)*
+[![Sync with Betterfox](https://github.com/MithunWijayasiri/Cleanfox/actions/workflows/sync.yml/badge.svg)](https://github.com/MithunWijayasiri/Cleanfox/actions/workflows/sync.yml)
+[![License: MIT](https://img.shields.io/github/license/MithunWijayasiri/Cleanfox)](LICENSE)
+[![Firefox](https://img.shields.io/badge/Firefox-user.js-orange?logo=firefoxbrowser&logoColor=white)](https://www.mozilla.org/firefox/)
+[![Betterfox](https://img.shields.io/badge/Based_on-Betterfox-blue)](https://github.com/yokoffing/Betterfox)
 
-1) Download the user.js file [here](https://github.com/MithunWijayasiri/Cleanfox/raw/main/user.js) (Or download source > [Click Here](https://github.com/MithunWijayasiri/Cleanfox/archive/refs/heads/main.zip))
-2) Open Firefox. In the URL bar, type `about:profiles` and press **Enter**.
-3) For the profile you want to use (or use default), click **Open Folder** in the **Root Directory** section.
-4) Move the `user.js` file into the folder.
-5) Done.
+CLEANFOX is a Firefox `user.js` configuration built on top of [Betterfox](https://github.com/yokoffing/Betterfox). It keeps the Betterfox performance and privacy baseline, relaxes a few defaults for everyday browsing, and adds a small set of personal UI preferences.
 
-## Difference with Betterfox Config
+Tested with Firefox, Firefox Nightly, and Firefox ESR.
 
-CLEANFOX takes Betterfox as-is, relaxes a few of its more aggressive defaults, and appends my own preferences. Everything below is re-applied automatically by `build.py` on each sync.
+## Table of Contents
 
-### Changes to Betterfox defaults
+- [Install](#install)
+- [Update](#update)
+- [Sync With Betterfox](#sync-with-betterfox)
+- [Betterfox Differences](#betterfox-differences)
+- [Optional Preferences](#optional-preferences)
+- [Recommended Add-ons](#recommended-add-ons)
+- [Resources](#resources)
+- [Credits](#credits)
 
-| Code | Betterfox | CLEANFOX | Why |
-| :--- | :---: | :---: | :--- |
-| `browser.contentblocking.category` | `strict` | `standard` | Strict tracking protection breaks some logins, embeds and comment widgets |
-| `browser.cache.disk.enable` | `false` | `true` | Keep the disk cache — avoids re-downloading assets on every restart (faster, less bandwidth) |
-| `browser.search.suggest.enabled` | `false` | `true` | Keep address-bar search suggestions / autocomplete |
-| `browser.download.manager.addToRecentDocs` | `false` | removed | Downloads show in the OS recent-files list; uncomment the block in the CLEANFOX footer to block it |
-| `browser.ai.*` / `browser.ml.*` | disabled | enabled | Firefox AI features left on by default; uncomment the AI block in the CLEANFOX footer to disable them |
+## Install
 
-### Personal preferences added
+1. Install [Firefox](https://www.mozilla.org/en-US/firefox/all/#product-desktop-release), if needed.
+2. Download [`user.js`](https://github.com/MithunWijayasiri/Cleanfox/raw/main/user.js).
+3. Open Firefox and go to `about:profiles`.
+4. Find the profile you want to use.
+5. Click **Open Folder** under **Root Directory**.
+6. Place `user.js` in that folder.
+7. Restart Firefox.
 
-| Code | Description |
-| :--- | :--- |
-| `ui.key.menuAccessKeyFocuses` | Disable menu popping up when pressing the ALT key |
-| `browser.tabs.warnOnClose` | Disable confirmation prompt when closing a window with multiple tabs |
-| `browser.urlbar.openViewOnFocus` | Disable address bar popping out |
-| `browser.tabs.hoverPreview.enabled` | Disable tab previews when hovering over them |
-| `layout.word_select.eat_space_to_next_word` | Double-click word selection no longer includes the trailing space |
+You can also download the full repository as a [ZIP archive](https://github.com/MithunWijayasiri/Cleanfox/archive/refs/heads/main.zip).
 
-## Staying in sync with Betterfox
+## Update
 
-`user.js` is generated from upstream Betterfox by `build.py`, which re-applies the CLEANFOX changes on top. A monthly GitHub Action ([`.github/workflows/sync.yml`](.github/workflows/sync.yml)) rebuilds it automatically; it can also be run on demand from the **Actions** tab, or locally with `python build.py`. Customizations live as constants at the top of `build.py`.
+Replace the existing profile `user.js` with the latest version from this repository, then restart Firefox.
 
-## Note
-> [!IMPORTANT]
-> There are a few extra things available at the bottom of the user.js file. Enable them if you need.
+## Sync With Betterfox
 
-## Recommended Addons
-1) [uBlock Origin](https://addons.mozilla.org/blog/ublock-origin-everything-you-need-to-know-about-the-ad-blocker/) - Adblocker | [Recommended filters](https://t.me/jCloud1/470)
-2) [Enhancer for YouTube™](https://addons.mozilla.org/en-US/firefox/addon/enhancer-for-youtube/) - Additional features for YouTube
-3) [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/) - Automatically learns to block invisible trackers
-4) [Sessionic](https://addons.mozilla.org/en-US/firefox/addon/sessionic/) - Save, manage and restore sessions
-4) [Duplicate Tab Shortcut](https://addons.mozilla.org/en-US/firefox/addon/duplicate-tab-shortcut/) - Press Alt+Shift+D to duplicate the current tab
+`user.js` is generated from upstream Betterfox by [`build.py`](build.py). The script fetches Betterfox, applies the CLEANFOX changes, writes `user.js`, and stores the upstream snapshot in [`upstream/betterfox.user.js`](upstream/betterfox.user.js).
 
-## Additional Readings
-* [Check what information your device exposes to the web](https://personaldata.info/#about)
-* [Firefox Hardening Guide](https://brainfucksec.github.io/firefox-hardening-guide)
-* [archlinux article about Firefox configuration](https://wiki.archlinux.org/title/Firefox/Privacy#Configuration)
+A monthly GitHub Action runs the sync automatically on the first day of each month. It can also be triggered manually from the **Actions** tab.
 
-## Credit
-* Many thanks to the [Betterfox](https://github.com/yokoffing/Betterfox) team for the base config.
+Run a local sync:
 
-<div align='center'>
-  <a href='https://www.websitecounterfree.com'><img src='https://www.websitecounterfree.com/c.php?d=9&id=48832&s=3' border='0' alt='Free Website Counter'></a><br/>
-since 05 Feb 2024</div>
+```bash
+python build.py
+```
+
+Run a local sync from a downloaded Betterfox file:
+
+```bash
+python build.py --upstream path/to/user.js
+```
+
+## Betterfox Differences
+
+CLEANFOX keeps Betterfox as the base config, then applies these changes.
+
+### Changed Defaults
+
+| Preference | Betterfox | CLEANFOX | Reason |
+| --- | --- | --- | --- |
+| `browser.contentblocking.category` | `strict` | `standard` | Avoids breakage with some logins, embeds, and comment widgets. |
+| `browser.cache.disk.enable` | `false` | `true` | Keeps disk cache for faster repeat visits and lower bandwidth use. |
+| `browser.search.suggest.enabled` | `false` | `true` | Keeps address-bar search suggestions and autocomplete. |
+| `browser.download.manager.addToRecentDocs` | `false` | removed | Allows downloads to appear in the OS recent-files list. |
+| `browser.ai.*` / `browser.ml.*` | disabled | removed | Leaves Firefox AI features at their browser defaults. |
+
+### Added Preferences
+
+| Preference | Description |
+| --- | --- |
+| `ui.key.menuAccessKeyFocuses` | Disables the menu opening when pressing `Alt`. |
+| `browser.tabs.warnOnClose` | Disables the confirmation prompt when closing a window with multiple tabs. |
+| `browser.urlbar.openViewOnFocus` | Disables the address bar pop-out on focus. |
+| `browser.tabs.hoverPreview.enabled` | Disables tab previews on hover. |
+| `layout.word_select.eat_space_to_next_word` | Prevents double-click word selection from including the trailing space. |
+
+## Optional Preferences
+
+The bottom of [`user.js`](user.js) includes commented preferences for stricter behavior. Uncomment only the options you want.
+
+Available optional blocks:
+
+- Disable Firefox AI features.
+- Stop adding downloads to the OS recent-files list.
+- Disable DRM content.
+- Disable Firefox Sync-related features.
+- Disable OS geolocation service integration.
+
+## Recommended Add-ons
+
+- [uBlock Origin](https://addons.mozilla.org/blog/ublock-origin-everything-you-need-to-know-about-the-ad-blocker/) - ad blocker. Optional: [recommended filters](https://t.me/jCloud1/470).
+- [Enhancer for YouTube](https://addons.mozilla.org/en-US/firefox/addon/enhancer-for-youtube/) - extra YouTube controls and features.
+- [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/) - tracker blocking based on observed behavior.
+- [Sessionic](https://addons.mozilla.org/en-US/firefox/addon/sessionic/) - session save, manage, and restore tools.
+- [Duplicate Tab Shortcut](https://addons.mozilla.org/en-US/firefox/addon/duplicate-tab-shortcut/) - `Alt` + `Shift` + `D` shortcut for duplicating the current tab.
+
+## Resources
+
+- [Personal Data Leak Check](https://personaldata.info/#about)
+- [Firefox Hardening Guide](https://brainfucksec.github.io/firefox-hardening-guide)
+- [ArchWiki: Firefox Privacy Configuration](https://wiki.archlinux.org/title/Firefox/Privacy#Configuration)
+
+## Credits
+
+- [Betterfox](https://github.com/yokoffing/Betterfox) for the base Firefox configuration.
+
+## License
+
+Released under the [MIT License](LICENSE).
+
+<div align="center">
+  <a href="https://www.websitecounterfree.com"><img src="https://www.websitecounterfree.com/c.php?d=9&id=48832&s=3" border="0" alt="Free Website Counter"></a><br>
+  since 05 Feb 2024
+</div>
