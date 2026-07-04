@@ -5,7 +5,7 @@ user.js for clean, fast, private Firefox.
 ## Getting started
 *If you don't have firefox already: [Get Firefox](https://www.mozilla.org/en-US/firefox/all/#product-desktop-release)*
 
-1) Download the user.js file [here](https://github.com/zJohnWick/Cleanfox-Config/raw/main/user.js) (Or download source > [Click Here](https://github.com/zJohnWick/CLEANFOX-CONFIG/archive/refs/heads/main.zip))
+1) Download the user.js file [here](https://github.com/MithunWijayasiri/Cleanfox/raw/main/user.js) (Or download source > [Click Here](https://github.com/MithunWijayasiri/Cleanfox/archive/refs/heads/main.zip))
 2) Open Firefox. In the URL bar, type `about:profiles` and press **Enter**.
 3) For the profile you want to use (or use default), click **Open Folder** in the **Root Directory** section.
 4) Move the `user.js` file into the folder.

@@ -17,8 +17,8 @@ ROOT = Path(__file__).resolve().parent
 # --- RECIPE ---------------------------------------------------------------
 CLEANFOX_VERSION = "2.0"  # bump manually on release
 HEADER_TITLE = "CLEANFOX"
-HEADER_MOTTO = '"zJohnWick"'
-HEADER_URL = "https://github.com/zJohnWick/CLEANFOX-CONFIG"
+HEADER_MOTTO = '"MithunWijayasiri"'
+HEADER_URL = "https://github.com/MithunWijayasiri/Cleanfox"
 HEADER_PREFIX = "// You can identify the features I've disabled in Betterfox by searching for the [#$] keyword."
 
 # FASTFOX is frozen: your trimmed version replaces upstream's entirely.
@@ -97,14 +97,14 @@ def apply_overlay(body, ov):
         if not m:
             out.append(line)
             continue
-        key, val = m.group(2), m.group(3)
+        indent, key, val, trail = m.group(1), m.group(2), m.group(3), m.group(4)
         if key in ov["remove"]:
             continue
         if key in ov["disable"]:
-            out.append(f'// user_pref("{key}", {val}); [CLEANFOX]')
+            out.append(f'{indent}// user_pref("{key}", {val});{trail} [CLEANFOX]')
             continue
         if key in ov["set"]:
-            out.append(f'user_pref("{key}", {ov["set"][key]});')
+            out.append(f'{indent}user_pref("{key}", {ov["set"][key]});{trail}')
             continue
         out.append(line)
     while out and not out[-1].strip():
@@ -125,7 +125,9 @@ def make_banner(width, *content):
 def build(upstream_text):
     lines = upstream_text.splitlines()
 
-    bx = next(i for i, l in enumerate(lines) if l.lstrip().startswith("* Betterfox"))
+    bx = next((i for i, l in enumerate(lines) if l.lstrip().startswith("* Betterfox")), None)
+    if bx is None:
+        raise SystemExit("marker not found: * Betterfox header")
     width = len(lines[bx - 1])
     version_m = re.search(r"version:\s*(\d+)", upstream_text)
     upstream_version = version_m.group(1) if version_m else "?"

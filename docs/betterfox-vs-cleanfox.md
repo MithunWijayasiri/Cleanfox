@@ -3,7 +3,8 @@
 Changes CLEANFOX applies to upstream [Betterfox `user.js`](https://github.com/yokoffing/Betterfox/blob/main/user.js).
 Applied by `build.py` on every sync — keyed by pref name, not line number.
 
-Base: Betterfox v152.
+Base: latest upstream Betterfox `main`. Synced version is recorded in the `user.js`
+header (`synced with Betterfox vNNN`), auto-filled per build — not pinned here.
 
 ## Header
 
@@ -11,6 +12,12 @@ Base: Betterfox v152.
 - `synced with Betterfox vNNN` auto-filled from fetched upstream version.
 - CLEANFOX release version manual (`CLEANFOX_VERSION` in `build.py`).
 - Added top comment: `// ... search for the [#$] keyword.`
+
+| Field | Value | Constant |
+|---|---|---|
+| title | `CLEANFOX` | `HEADER_TITLE` |
+| motto | `"MithunWijayasiri"` | `HEADER_MOTTO` |
+| url | `https://github.com/MithunWijayasiri/Cleanfox` | `HEADER_URL` |
 
 ## FASTFOX — frozen
 

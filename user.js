@@ -11,9 +11,9 @@
 
 /****************************************************************************
  * CLEANFOX                                                                 *
- * "zJohnWick"                                                              *
+ * "MithunWijayasiri"                                                       *
  * version: 2.0 (synced with Betterfox v152)                                *
- * url: https://github.com/zJohnWick/CLEANFOX-CONFIG                        *
+ * url: https://github.com/MithunWijayasiri/Cleanfox                        *
 ****************************************************************************/
 
 /****************************************************************************
