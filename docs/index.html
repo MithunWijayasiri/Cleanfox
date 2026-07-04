@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
 <script>
   (function () {
+    document.documentElement.classList.add("js");
     try {
       var t = localStorage.getItem("theme");
       if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -265,7 +266,7 @@
     .cursor { animation: blink 1.05s steps(1) 2.1s infinite; opacity: 0; }
     @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
-    .reveal > * { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    .js .reveal > * { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
     .reveal.in > * { opacity: 1; transform: none; }
     .reveal.in > *:nth-child(2) { transition-delay: 0.06s; }
     .reveal.in > *:nth-child(3) { transition-delay: 0.12s; }
