@@ -7,8 +7,6 @@
 
 CLEANFOX is a Firefox `user.js` configuration built on top of [Betterfox](https://github.com/yokoffing/Betterfox). It keeps the Betterfox performance and privacy baseline, relaxes a few defaults for everyday browsing, and adds a small set of personal UI preferences.
 
-Tested with Firefox, Firefox Nightly, and Firefox ESR.
-
 ## Table of Contents
 
 - [Install](#install)
@@ -40,19 +38,7 @@ Replace the existing profile `user.js` with the latest version from this reposit
 
 `user.js` is generated from upstream Betterfox by [`build.py`](build.py). The script fetches Betterfox, applies the CLEANFOX changes, writes `user.js`, and stores the upstream snapshot in [`upstream/betterfox.user.js`](upstream/betterfox.user.js).
 
-A monthly GitHub Action runs the sync automatically on the first day of each month. It can also be triggered manually from the **Actions** tab.
-
-Run a local sync:
-
-```bash
-python build.py
-```
-
-Run a local sync from a downloaded Betterfox file:
-
-```bash
-python build.py --upstream path/to/user.js
-```
+A monthly GitHub Action runs the sync automatically on the first day of each month.
 
 ## Betterfox Differences
 
@@ -111,8 +97,3 @@ Available optional blocks:
 ## License
 
 Released under the [MIT License](LICENSE).
-
-<div align="center">
-  <a href="https://www.websitecounterfree.com"><img src="https://www.websitecounterfree.com/c.php?d=9&id=48832&s=3" border="0" alt="Free Website Counter"></a><br>
-  since 05 Feb 2024
-</div>
