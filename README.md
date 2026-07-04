@@ -5,28 +5,39 @@ user.js for clean, fast, private Firefox.
 ## Getting started
 *If you don't have firefox already: [Get Firefox](https://www.mozilla.org/en-US/firefox/all/#product-desktop-release)*
 
-1) Download the user.js file [here](https://github.com/zJohnWick/Cleanfox-Config/raw/main/user.js) (Or download source > [Click Here](https://github.com/zJohnWick/CLEANFOX-CONFIG/archive/refs/heads/main.zip))
+1) Download the user.js file [here](https://github.com/MithunWijayasiri/Cleanfox/raw/main/user.js) (Or download source > [Click Here](https://github.com/MithunWijayasiri/Cleanfox/archive/refs/heads/main.zip))
 2) Open Firefox. In the URL bar, type `about:profiles` and press **Enter**.
 3) For the profile you want to use (or use default), click **Open Folder** in the **Root Directory** section.
 4) Move the `user.js` file into the folder.
 5) Done.
 
-## Difference with Betterfox Config.
-* Changed a few things in Betterfox.
+## Difference with Betterfox Config
 
-| Fox Type | Line # | Description | Status |
-| :---: | :---: | :---: | :---: |
-| `Peskyfox.js` | 274 | Pinned Shortcuts on New Tab | On |
-| `Securefox.js` | 192 | Battery status tracking | Off |
+CLEANFOX takes Betterfox as-is, relaxes a few of its more aggressive defaults, and appends my own preferences. Everything below is re-applied automatically by `build.py` on each sync.
 
-* Following things added based on personal preference.
+### Changes to Betterfox defaults
+
+| Code | Betterfox | CLEANFOX | Why |
+| :--- | :---: | :---: | :--- |
+| `browser.contentblocking.category` | `strict` | `standard` | Strict tracking protection breaks some logins, embeds and comment widgets |
+| `browser.cache.disk.enable` | `false` | `true` | Keep the disk cache — avoids re-downloading assets on every restart (faster, less bandwidth) |
+| `browser.search.suggest.enabled` | `false` | `true` | Keep address-bar search suggestions / autocomplete |
+| `browser.download.manager.addToRecentDocs` | `false` | removed | Downloads show in the OS recent-files list; uncomment the block in the CLEANFOX footer to block it |
+| `browser.ai.*` / `browser.ml.*` | disabled | enabled | Firefox AI features left on by default; uncomment the AI block in the CLEANFOX footer to disable them |
+
+### Personal preferences added
 
 | Code | Description |
-| :---: | --- |
-| `browser.urlbar.speculativeConnect.enabled` | Disable URL bar, making speculative connections |
-| `ui.key.menuAccessKeyFocuses` | Disable menu popping up when press ALT key |
-| `browser.tabs.warnOnClose` | Ask confirmation when closing a window with multiple tabs |
+| :--- | :--- |
+| `ui.key.menuAccessKeyFocuses` | Disable menu popping up when pressing the ALT key |
+| `browser.tabs.warnOnClose` | Disable confirmation prompt when closing a window with multiple tabs |
 | `browser.urlbar.openViewOnFocus` | Disable address bar popping out |
+| `browser.tabs.hoverPreview.enabled` | Disable tab previews when hovering over them |
+| `layout.word_select.eat_space_to_next_word` | Double-click word selection no longer includes the trailing space |
+
+## Staying in sync with Betterfox
+
+`user.js` is generated from upstream Betterfox by `build.py`, which re-applies the CLEANFOX changes on top. A monthly GitHub Action ([`.github/workflows/sync.yml`](.github/workflows/sync.yml)) rebuilds it automatically; it can also be run on demand from the **Actions** tab, or locally with `python build.py`. Customizations live as constants at the top of `build.py`.
 
 ## Note
 > [!IMPORTANT]

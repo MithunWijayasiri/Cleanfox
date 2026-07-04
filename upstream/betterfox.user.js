@@ -8,10 +8,10 @@
  */
 
 /****************************************************************************
- * CLEANFOX                                                                 *
- * "MithunWijayasiri"                                                       *
- * version: 2.0 (synced with Betterfox v152)                                *
- * url: https://github.com/MithunWijayasiri/Cleanfox                        *
+ * Betterfox                                                                *
+ * "Ad meliora"                                                             *
+ * version: 152                                                             *
+ * url: https://github.com/yokoffing/Betterfox                              *
 ****************************************************************************/
 
 /****************************************************************************
@@ -47,7 +47,7 @@ user_pref("network.dnsCacheExpiration", 3600);
  * SECTION: SECUREFOX                                                       *
 ****************************************************************************/
 /** TRACKING PROTECTION ***/
-user_pref("browser.contentblocking.category", "standard");
+user_pref("browser.contentblocking.category", "strict");
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
 user_pref("browser.uitour.enabled", false);
 user_pref("privacy.globalprivacycontrol.enabled", true);
@@ -63,7 +63,7 @@ user_pref("browser.xul.error_pages.expert_bad_cert", true);
 user_pref("security.tls.enable_0rtt_data", false);
 
 /** DISK AVOIDANCE ***/
-user_pref("browser.cache.disk.enable", true);
+user_pref("browser.cache.disk.enable", false);
 user_pref("browser.privatebrowsing.forceMediaMemoryCache", true);
 user_pref("media.memory_cache_max_size", 65536);
 user_pref("browser.sessionstore.interval", 60000);
@@ -83,7 +83,7 @@ user_pref("network.prefetch-next", false);
 user_pref("browser.urlbar.trimHttps", true);
 user_pref("browser.urlbar.untrimOnUserInteraction.featureGate", true);
 user_pref("browser.search.separatePrivateDefault.ui.enabled", true);
-user_pref("browser.search.suggest.enabled", true);
+user_pref("browser.search.suggest.enabled", false);
 user_pref("browser.urlbar.quicksuggest.enabled", false);
 user_pref("browser.urlbar.groupLabels.enabled", false);
 user_pref("browser.formfill.enable", false);
@@ -171,6 +171,14 @@ user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 user_pref("browser.compactmode.show", true);
 user_pref("browser.privateWindowSeparation.enabled", false); // WINDOWS
 
+/** AI ***/
+user_pref("browser.ai.control.default", "blocked");
+user_pref("browser.ml.enable", false);
+user_pref("browser.ml.chat.enabled", false);
+user_pref("browser.ml.chat.menu", false);
+user_pref("browser.tabs.groups.smart.enabled", false);
+user_pref("browser.ml.linkPreview.enabled", false);
+
 /** FULLSCREEN NOTICE ***/
 user_pref("full-screen-api.transition-duration.enter", "0 0");
 user_pref("full-screen-api.transition-duration.leave", "0 0");
@@ -186,57 +194,31 @@ user_pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
 user_pref("browser.newtabpage.activity-stream.showSponsored", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredCheckboxes", false);
 
+/** DOWNLOADS ***/
+user_pref("browser.download.manager.addToRecentDocs", false);
+
 /** PDF ***/
 user_pref("browser.download.open_pdf_attachments_inline", true);
 
 /** TAB BEHAVIOR ***/
 user_pref("browser.bookmarks.openInTabClosesMenu", false);
 user_pref("findbar.highlightAll", true);
-user_pref("layout.word_select.eat_space_to_next_word", false);
 
 /****************************************************************************
- * SECTION: CLEANFOX                                                        *
+ * SECTION: SMOOTHFOX                                                       *
 ****************************************************************************/
+// visit https://github.com/yokoffing/Betterfox/blob/main/Smoothfox.js
+// Enter your scrolling overrides below this line:
 
-/** PERSONAL PREFERENCES ***/
-user_pref("ui.key.menuAccessKeyFocuses", false);
-
-// Ask for confirmation when closing a window with multiple tabs
-user_pref("browser.tabs.warnOnClose", false);
-
-// Disable address bar popping out
-user_pref("browser.urlbar.openViewOnFocus", false);
-
-// Disable tab previews when hovering over them
-user_pref("browser.tabs.hoverPreview.enabled", false);
-
-/** TRY YOURSELF ***/
-// PREF: disable Firefox AI features
-// user_pref("browser.ai.control.default", "blocked");
-// user_pref("browser.ml.enable", false);
-// user_pref("browser.ml.chat.enabled", false);
-// user_pref("browser.ml.chat.menu", false);
-// user_pref("browser.tabs.groups.smart.enabled", false);
-// user_pref("browser.ml.linkPreview.enabled", false);
-
-// PREF: don't add downloads to the OS recent-files list
-// user_pref("browser.download.manager.addToRecentDocs", false);
-
-// PREF: disable all DRM content
-// user_pref("media.eme.enabled", false);
-
-// PREF: disable Firefox Sync
-// user_pref("identity.fxaccounts.enabled", false);
-// user_pref("dom.push.enabled", false);
-// user_pref("dom.push.connection.enabled", false);
-// user_pref("browser.tabs.firefox-view", false);
-
-// PREF: disable using the OS's geolocation service
-// user_pref("geo.provider.ms-windows-location", false); // [WINDOWS]
-// user_pref("geo.provider.use_corelocation", false); // [MAC]
-// user_pref("geo.provider.use_gpsd", false); // [LINUX] broken on Linux?
-// user_pref("geo.provider.use_geoclue", false); // [FF102+] [LINUX]
 
 /****************************************************************************
- * END: CLEANFOX                                                            *
+ * START: MY OVERRIDES                                                      *
+****************************************************************************/
+// visit https://github.com/yokoffing/Betterfox/wiki/Common-Overrides
+// visit https://github.com/yokoffing/Betterfox/wiki/Optional-Hardening
+// Enter your personal overrides below this line:
+
+
+/****************************************************************************
+ * END: BETTERFOX                                                           *
 ****************************************************************************/
