@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CLEANFOX — Betterfox, minus the breakage</title>
+<meta name="description" content="A Firefox user.js built on Betterfox. Same speed and privacy baseline, relaxed where strict settings break the web, plus a few quiet UI fixes." />
+<meta property="og:title" content="CLEANFOX — Betterfox, minus the breakage" />
+<meta property="og:description" content="A Firefox user.js built on Betterfox. Rebuilt from upstream every month." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦊</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #f5f7fa;
+    --card: #ffffff;
+    --ink: #15181d;
+    --muted: #5b6472;
+    --line: #dfe4eb;
+    --orange: #e5570b;
+    --orange-deep: #c74905;
+    --ed-bg: #1a1d23;
+    --ed-frame: #272c35;
+    --ed-text: #b9c2cf;
+    --ed-bright: #e6ebf2;
+    --ed-comment: #5f6877;
+    --add: #3fb950;
+    --add-bg: rgba(63, 185, 80, 0.13);
+    --del: #f47067;
+    --del-bg: rgba(244, 112, 115, 0.11);
+    --max: 1140px;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    border-top: 3px solid var(--orange);
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; border-radius: 3px; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: var(--mono); }
+
+  /* ── Topbar ── */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(245, 247, 250, 0.85);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+  .brand { font-family: var(--display); font-weight: 800; font-size: 1.15rem; letter-spacing: -0.01em; text-decoration: none; }
+  .brand .dot { color: var(--orange); }
+  .topnav { display: flex; gap: 26px; font-size: 0.9rem; }
+  .topnav a { color: var(--muted); text-decoration: none; transition: color 0.15s ease; }
+  .topnav a:hover { color: var(--ink); }
+  @media (max-width: 640px) { .topnav a.hide-sm { display: none; } }
+
+  /* ── Hero ── */
+  .hero { padding: 84px 0 96px; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.82rem; color: var(--muted);
+    margin-bottom: 22px; display: block;
+  }
+  .eyebrow b { color: var(--orange); font-weight: 500; }
+  h1 {
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(2.7rem, 5.4vw, 4.6rem);
+    line-height: 1.02; letter-spacing: -0.035em;
+    margin-bottom: 22px;
+  }
+  .lede { color: var(--muted); font-size: 1.13rem; max-width: 46ch; margin-bottom: 32px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 34px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-weight: 600; font-size: 0.98rem; text-decoration: none;
+    padding: 13px 22px; border-radius: 10px;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn-primary { background: var(--orange); color: #fff; box-shadow: 0 8px 20px -8px rgba(229, 87, 11, 0.55); }
+  .btn-primary:hover { background: var(--orange-deep); transform: translateY(-1px); }
+  .btn-ghost { background: var(--card); border: 1px solid var(--line); color: var(--ink); }
+  .btn-ghost:hover { border-color: #b9c2cf; transform: translateY(-1px); }
+  .facts { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 0; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); list-style: none; }
+  .facts li:not(:last-child)::after { content: "·"; margin: 0 12px; color: var(--line); }
+  .facts b { color: var(--ink); font-weight: 500; }
+  @media (max-width: 980px) {
+    .hero { padding: 56px 0 72px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  /* ── Editor window (signature) ── */
+  .editor {
+    background: var(--ed-bg); border: 1px solid var(--ed-frame); border-radius: 14px;
+    box-shadow: 0 28px 64px -28px rgba(21, 24, 29, 0.4);
+    overflow: hidden; font-family: var(--mono); font-size: 0.82rem;
+  }
+  .ed-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 16px; background: #20242c; border-bottom: 1px solid var(--ed-frame);
+    color: #8a93a1; font-size: 0.76rem;
+  }
+  .ed-dots { display: flex; gap: 6px; }
+  .ed-dots span { width: 11px; height: 11px; border-radius: 50%; background: #3a4150; }
+  .ed-dots span:first-child { background: #4a5262; }
+  .ed-body { padding: 18px 20px 20px; overflow-x: auto; }
+  .ed-body pre { line-height: 1.75; }
+  .cl { display: block; white-space: pre; color: var(--ed-text); padding: 0 8px; border-radius: 4px; }
+  .cl.cm { color: var(--ed-comment); font-style: italic; }
+  .cl.del { background: var(--del-bg); color: #98a1b0; }
+  .cl.del .sign { color: var(--del); }
+  .cl.add { background: var(--add-bg); color: var(--ed-bright); }
+  .cl.add .sign { color: var(--add); }
+  .sign { display: inline-block; width: 1.4ch; }
+  .str { color: #ffb86b; }
+  .cursor {
+    display: inline-block; width: 8px; height: 1.05em; background: var(--orange);
+    vertical-align: text-bottom; margin-left: 2px;
+  }
+  .ed-status {
+    display: flex; justify-content: space-between; gap: 12px;
+    padding: 9px 16px; border-top: 1px solid var(--ed-frame);
+    color: #6b7484; font-size: 0.73rem;
+  }
+
+  /* ── Sections ── */
+  .section { padding: 88px 0; border-top: 1px solid var(--line); }
+  .sec-eyebrow { font-family: var(--mono); font-size: 0.8rem; color: var(--orange); margin-bottom: 14px; }
+  .sec-eyebrow::before { content: "/** SECTION: "; color: var(--muted); }
+  .sec-eyebrow::after { content: " ***/"; color: var(--muted); }
+  h2 {
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem); letter-spacing: -0.025em;
+    margin-bottom: 14px;
+  }
+  .sec-lede { color: var(--muted); max-width: 58ch; margin-bottom: 44px; }
+
+  /* ── What's inside: cards named after the file's own sections ── */
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px 22px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px -20px rgba(21, 24, 29, 0.25); }
+  .card .tag { font-family: var(--mono); font-size: 0.72rem; color: var(--orange); display: block; margin-bottom: 14px; }
+  .card h3 { font-family: var(--display); font-weight: 700; font-size: 1.15rem; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .card p { color: var(--muted); font-size: 0.92rem; }
+  .card.upstream .tag::after { content: " · upstream"; color: var(--muted); }
+  .card.local { border-color: rgba(229, 87, 11, 0.35); }
+  .card.local .tag::after { content: " · this repo"; color: var(--muted); }
+  @media (max-width: 960px) { .cards { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .cards { grid-template-columns: 1fr; } }
+
+  /* ── Patch block ── */
+  .patch { max-width: 880px; }
+  .cl.hh { color: #8a93a1; }
+  .cl.hh .at { color: var(--orange); }
+  .gap-line { height: 0.9em; display: block; }
+
+  /* ── Optional prefs: hover to uncomment ── */
+  .opt-hint { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); margin-top: 16px; }
+  .opt { display: block; border-radius: 6px; padding: 2px 0; cursor: default; outline-offset: 0; }
+  .opt .cl { transition: background 0.25s ease, color 0.25s ease; }
+  .opt .sl { color: var(--ed-comment); transition: opacity 0.25s ease; }
+  .opt:hover .sl, .opt:focus-visible .sl { opacity: 0.18; }
+  .opt:hover .cl.togglable, .opt:focus-visible .cl.togglable { background: var(--add-bg); color: var(--ed-bright); }
+  .opt:hover .cl.label, .opt:focus-visible .cl.label { color: #98a1b0; }
+
+  /* ── Install ── */
+  .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; counter-reset: step; list-style: none; }
+  .steps li {
+    counter-increment: step;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px 20px; position: relative;
+  }
+  .steps li::before {
+    content: counter(step);
+    font-family: var(--display); font-weight: 800; font-size: 1.5rem;
+    color: var(--orange); display: block; margin-bottom: 10px;
+  }
+  .steps p { color: var(--muted); font-size: 0.92rem; }
+  .steps code {
+    font-family: var(--mono); font-size: 0.84em; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px;
+    white-space: nowrap;
+  }
+  @media (max-width: 960px) { .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+
+  /* ── CTA ── */
+  .cta { padding: 100px 0; border-top: 1px solid var(--line); text-align: center; }
+  .cta h2 { font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 12px; }
+  .cta p { color: var(--muted); margin-bottom: 30px; }
+  .cta .actions { justify-content: center; margin-bottom: 0; }
+
+  /* ── Footer ── */
+  footer { border-top: 1px solid var(--line); padding: 36px 0 52px; }
+  .foot-inner { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; color: var(--muted); font-size: 0.86rem; }
+  footer a { color: var(--muted); transition: color 0.15s ease; }
+  footer a:hover { color: var(--orange); }
+  .foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+
+  /* ── Motion ── */
+  @media (prefers-reduced-motion: no-preference) {
+    .rise { opacity: 0; animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+    .rise.d1 { animation-delay: 0.08s; }
+    .rise.d2 { animation-delay: 0.16s; }
+    .rise.d3 { animation-delay: 0.24s; }
+    .rise.d4 { animation-delay: 0.32s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+    /* hero editor: lines land one by one, like the patch being applied */
+    .hero .editor { opacity: 0; animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s forwards; }
+    .hero .editor .cl { opacity: 0; transform: translateX(-6px); animation: land 0.4s ease forwards; }
+    .hero .editor .cl:nth-child(1)  { animation-delay: 0.75s; }
+    .hero .editor .cl:nth-child(2)  { animation-delay: 0.90s; }
+    .hero .editor .cl:nth-child(3)  { animation-delay: 1.05s; }
+    .hero .editor .cl:nth-child(5)  { animation-delay: 1.32s; }
+    .hero .editor .cl:nth-child(6)  { animation-delay: 1.44s; }
+    .hero .editor .cl:nth-child(7)  { animation-delay: 1.56s; }
+    .hero .editor .cl:nth-child(9)  { animation-delay: 1.78s; }
+    .hero .editor .cl:nth-child(10) { animation-delay: 1.88s; }
+    .hero .editor .cl:nth-child(11) { animation-delay: 1.98s; }
+    @keyframes land { to { opacity: 1; transform: none; } }
+    .cursor { animation: blink 1.05s steps(1) 2.1s infinite; opacity: 0; }
+    @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+    .reveal > * { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    .reveal.in > * { opacity: 1; transform: none; }
+    .reveal.in > *:nth-child(2) { transition-delay: 0.06s; }
+    .reveal.in > *:nth-child(3) { transition-delay: 0.12s; }
+    .reveal.in > *:nth-child(4) { transition-delay: 0.18s; }
+    .reveal.in > *:nth-child(5) { transition-delay: 0.24s; }
+    .reveal.in > *:nth-child(6) { transition-delay: 0.3s; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="#">cleanfox<span class="dot">.</span></a>
+    <nav class="topnav">
+      <a href="#inside" class="hide-sm">What's inside</a>
+      <a href="#diff" class="hide-sm">The diff</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/MithunWijayasiri/Cleanfox">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow rise">// firefox user.js · synced with <b>latest Betterfox</b></span>
+      <h1 class="rise d1">Betterfox, minus the&nbsp;breakage.</h1>
+      <p class="lede rise d2">Cleanfox keeps the Betterfox speed and privacy baseline, relaxes the few settings that break logins and embeds, and quiets the UI. One file, rebuilt from upstream every month.</p>
+      <div class="actions rise d3">
+        <a class="btn btn-primary" href="https://github.com/MithunWijayasiri/Cleanfox/raw/main/user.js">Download user.js</a>
+        <a class="btn btn-ghost" href="https://github.com/MithunWijayasiri/Cleanfox">View on GitHub</a>
+      </div>
+      <ul class="facts rise d4">
+        <li><b>3</b> defaults relaxed</li>
+        <li><b>5</b> prefs added</li>
+        <li><b>17</b> telemetry prefs off</li>
+        <li>resyncs monthly</li>
+      </ul>
+    </div>
+
+    <figure class="editor" role="figure" aria-label="Diff of user.js showing Cleanfox changes applied on top of Betterfox">
+      <div class="ed-bar">
+        <span class="ed-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>user.js — patched from Betterfox</span>
+      </div>
+      <div class="ed-body">
+<pre><span class="cl cm">/** TRACKING PROTECTION ***/</span><span class="cl del"><span class="sign">-</span>user_pref("browser.contentblocking.category", <span class="str">"strict"</span>);</span><span class="cl add"><span class="sign">+</span>user_pref("browser.contentblocking.category", <span class="str">"standard"</span>);</span><span class="gap-line"></span><span class="cl cm">/** DISK AVOIDANCE ***/</span><span class="cl del"><span class="sign">-</span>user_pref("browser.cache.disk.enable", false);</span><span class="cl add"><span class="sign">+</span>user_pref("browser.cache.disk.enable", true);</span><span class="gap-line"></span><span class="cl cm">/** SECTION: CLEANFOX ***/</span><span class="cl add"><span class="sign">+</span>user_pref("browser.tabs.hoverPreview.enabled", false);</span><span class="cl add"><span class="sign">+</span>user_pref("browser.urlbar.openViewOnFocus", false);<span class="cursor" aria-hidden="true"></span></span></pre>
+      </div>
+      <div class="ed-status">
+        <span>build.py · applies Cleanfox on upstream</span>
+        <span>GitHub Action · monthly</span>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<section class="section reveal" id="inside">
+  <div class="wrap">
+    <div class="sec-eyebrow">WHAT'S INSIDE</div>
+    <h2>Four sections, straight from the file.</h2>
+    <p class="sec-lede">The config keeps Betterfox's own structure — three upstream sections, plus one that's ours.</p>
+    <div class="cards">
+      <div class="card upstream">
+        <span class="tag">FASTFOX</span>
+        <h3>Speed</h3>
+        <p>Caching, networking, and rendering tuned upstream. Snappier loads without touching a single pref yourself.</p>
+      </div>
+      <div class="card upstream">
+        <span class="tag">SECUREFOX</span>
+        <h3>Privacy</h3>
+        <p>Telemetry, studies, and crash pings zeroed out — 17 prefs' worth. HTTPS-only mode on, referrers trimmed.</p>
+      </div>
+      <div class="card upstream">
+        <span class="tag">PESKYFOX</span>
+        <h3>Quiet UI</h3>
+        <p>Sponsored tiles, recommendations, and full-screen warnings removed. The new-tab page is actually new.</p>
+      </div>
+      <div class="card local">
+        <span class="tag">CLEANFOX</span>
+        <h3>House rules</h3>
+        <p>No tab previews on hover, no address-bar pop-out, no Alt stealing focus for the menu, saner double-click selection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal" id="diff">
+  <div class="wrap">
+    <div class="sec-eyebrow">THE DIFF</div>
+    <h2>Every change from Betterfox, as a patch.</h2>
+    <p class="sec-lede">Cleanfox isn't a fork that drifts — <code class="mono" style="font-size:0.9em">build.py</code> re-applies exactly this patch to fresh upstream every month. This is the whole thing.</p>
+    <figure class="editor patch" role="figure" aria-label="Full patch applied to Betterfox">
+      <div class="ed-bar">
+        <span class="ed-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>betterfox → cleanfox</span>
+      </div>
+      <div class="ed-body">
+<pre><span class="cl hh"><span class="at">@@</span> tracking protection <span class="at">@@</span></span><span class="cl del"><span class="sign">-</span>user_pref("browser.contentblocking.category", <span class="str">"strict"</span>);</span><span class="cl add"><span class="sign">+</span>user_pref("browser.contentblocking.category", <span class="str">"standard"</span>);</span><span class="cl cm">  // logins, embeds, and comment widgets keep working</span><span class="gap-line"></span><span class="cl hh"><span class="at">@@</span> disk cache <span class="at">@@</span></span><span class="cl del"><span class="sign">-</span>user_pref("browser.cache.disk.enable", false);</span><span class="cl add"><span class="sign">+</span>user_pref("browser.cache.disk.enable", true);</span><span class="cl cm">  // faster repeat visits, less bandwidth</span><span class="gap-line"></span><span class="cl hh"><span class="at">@@</span> search suggestions <span class="at">@@</span></span><span class="cl del"><span class="sign">-</span>user_pref("browser.search.suggest.enabled", false);</span><span class="cl add"><span class="sign">+</span>user_pref("browser.search.suggest.enabled", true);</span><span class="cl cm">  // address-bar suggestions stay</span><span class="gap-line"></span><span class="cl hh"><span class="at">@@</span> left at firefox defaults <span class="at">@@</span></span><span class="cl del"><span class="sign">-</span>user_pref("browser.download.manager.addToRecentDocs", false);</span><span class="cl del"><span class="sign">-</span>user_pref("browser.ml.enable", false);  <span class="str">// + other browser.ai.* / browser.ml.*</span></span><span class="cl cm">  // downloads show in recent files; AI prefs untouched — strict versions live in the optional block</span><span class="gap-line"></span><span class="cl hh"><span class="at">@@</span> added: house rules <span class="at">@@</span></span><span class="cl add"><span class="sign">+</span>user_pref("ui.key.menuAccessKeyFocuses", false);</span><span class="cl add"><span class="sign">+</span>user_pref("browser.tabs.warnOnClose", false);</span><span class="cl add"><span class="sign">+</span>user_pref("browser.urlbar.openViewOnFocus", false);</span><span class="cl add"><span class="sign">+</span>user_pref("browser.tabs.hoverPreview.enabled", false);</span><span class="cl add"><span class="sign">+</span>user_pref("layout.word_select.eat_space_to_next_word", false);</span></pre>
+      </div>
+      <div class="ed-status">
+        <span>5 hunks</span>
+        <span>everything else is Betterfox, verbatim</span>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<section class="section reveal" id="optional">
+  <div class="wrap">
+    <div class="sec-eyebrow">TRY YOURSELF</div>
+    <h2>Stricter, if you want it.</h2>
+    <p class="sec-lede">The bottom of the file ships commented-out blocks for people who want more. They do nothing until you uncomment them.</p>
+    <figure class="editor patch" role="figure" aria-label="Optional commented preferences">
+      <div class="ed-bar">
+        <span class="ed-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>user.js — optional block</span>
+      </div>
+      <div class="ed-body">
+<pre><span class="opt" tabindex="0"><span class="cl cm label">// PREF: disable Firefox AI features</span><span class="cl togglable"><span class="sl">// </span>user_pref("browser.ai.control.default", <span class="str">"blocked"</span>);</span><span class="cl togglable"><span class="sl">// </span>user_pref("browser.ml.enable", false);</span></span><span class="gap-line"></span><span class="opt" tabindex="0"><span class="cl cm label">// PREF: disable all DRM content</span><span class="cl togglable"><span class="sl">// </span>user_pref("media.eme.enabled", false);</span></span><span class="gap-line"></span><span class="opt" tabindex="0"><span class="cl cm label">// PREF: disable Firefox Sync</span><span class="cl togglable"><span class="sl">// </span>user_pref("identity.fxaccounts.enabled", false);</span></span><span class="gap-line"></span><span class="opt" tabindex="0"><span class="cl cm label">// PREF: disable OS geolocation services</span><span class="cl togglable"><span class="sl">// </span>user_pref("geo.provider.ms-windows-location", false);  <span class="str">// [WINDOWS]</span></span></span></pre>
+      </div>
+      <div class="ed-status">
+        <span>ships commented out</span>
+        <span>uncomment · save · restart</span>
+      </div>
+    </figure>
+    <p class="opt-hint">// hover a block — in the file, removing the slashes is all it takes</p>
+  </div>
+</section>
+
+<section class="section" id="install">
+  <div class="wrap reveal">
+    <div class="sec-eyebrow">INSTALL</div>
+    <h2>In your profile in under a minute.</h2>
+    <p class="sec-lede">No extension, no account, nothing running in the background — Firefox reads the file once at startup.</p>
+    <ol class="steps">
+      <li><p>Download <code>user.js</code> from the repo.</p></li>
+      <li><p>In Firefox, open <code>about:profiles</code>.</p></li>
+      <li><p>Under your profile, click <strong>Open Folder</strong> next to Root&nbsp;Directory.</p></li>
+      <li><p>Drop <code>user.js</code> into that folder.</p></li>
+      <li><p>Restart Firefox. Done.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="cta reveal">
+  <div class="wrap">
+    <h2>One file. Drop it in.</h2>
+    <p>MIT licensed. Rebuilt from upstream Betterfox on the first of every month.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="https://github.com/MithunWijayasiri/Cleanfox/raw/main/user.js">Download user.js</a>
+      <a class="btn btn-ghost" href="https://github.com/MithunWijayasiri/Cleanfox/blob/main/README.md">Read the docs</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>Based on <a href="https://github.com/yokoffing/Betterfox">Betterfox</a> · MIT License</span>
+    <div class="foot-links">
+      <a href="https://github.com/MithunWijayasiri/Cleanfox">GitHub</a>
+      <a href="https://github.com/yokoffing/Betterfox">Betterfox</a>
+      <a href="https://github.com/MithunWijayasiri/Cleanfox/blob/main/LICENSE">License</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var reveals = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window) ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      reveals.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.1 });
+    reveals.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+</body>
+</html>
