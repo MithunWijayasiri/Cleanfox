@@ -7,8 +7,6 @@
  * To make lasting changes to preferences, you will have to edit the user.js.
  */
 
-// You can identify the features I've disabled in Betterfox by searching for the [#$] keyword.
-
 /****************************************************************************
  * CLEANFOX                                                                 *
  * "MithunWijayasiri"                                                       *

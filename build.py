@@ -19,7 +19,6 @@ CLEANFOX_VERSION = "2.0"  # bump manually on release
 HEADER_TITLE = "CLEANFOX"
 HEADER_MOTTO = '"MithunWijayasiri"'
 HEADER_URL = "https://github.com/MithunWijayasiri/Cleanfox"
-HEADER_PREFIX = "// You can identify the features I've disabled in Betterfox by searching for the [#$] keyword."
 
 # Per-section overlays applied to upstream (keyed by pref name).
 OVERLAYS = {
@@ -204,7 +203,7 @@ def build(upstream_text):
         + make_banner(width, "END: CLEANFOX")
     )
 
-    blocks = [preamble, [HEADER_PREFIX, ""] + header, fastfox, securefox, peskyfox, footer]
+    blocks = [preamble, header, fastfox, securefox, peskyfox, footer]
     text = "\n\n".join("\n".join(b).strip("\n") for b in blocks)
     return text.rstrip("\n") + "\n", upstream_version
 
