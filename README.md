@@ -13,16 +13,27 @@ user.js for clean, fast, private Firefox.
 
 ## Difference with Betterfox Config
 
-CLEANFOX is Betterfox with a trimmed FASTFOX section, a few pref tweaks, and my own personal preferences appended. Full breakdown: **[docs/betterfox-vs-cleanfox.md](docs/betterfox-vs-cleanfox.md)**.
+CLEANFOX takes Betterfox as-is, relaxes a few of its more aggressive defaults, and appends my own preferences. Everything below is re-applied automatically by `build.py` on each sync.
 
-Personal preferences added:
+### Changes to Betterfox defaults
+
+| Code | Betterfox | CLEANFOX | Why |
+| :--- | :---: | :---: | :--- |
+| `browser.contentblocking.category` | `strict` | `standard` | Strict tracking protection breaks some logins, embeds and comment widgets |
+| `browser.cache.disk.enable` | `false` | `true` | Keep the disk cache — avoids re-downloading assets on every restart (faster, less bandwidth) |
+| `browser.search.suggest.enabled` | `false` | `true` | Keep address-bar search suggestions / autocomplete |
+| `browser.download.manager.addToRecentDocs` | `false` | removed | Downloads show in the OS recent-files list; uncomment the block in the CLEANFOX footer to block it |
+| `browser.ai.*` / `browser.ml.*` | disabled | enabled | Firefox AI features left on by default; uncomment the AI block in the CLEANFOX footer to disable them |
+
+### Personal preferences added
 
 | Code | Description |
-| :---: | --- |
-| `ui.key.menuAccessKeyFocuses` | Disable menu popping up when press ALT key |
-| `browser.tabs.warnOnClose` | Ask confirmation when closing a window with multiple tabs |
+| :--- | :--- |
+| `ui.key.menuAccessKeyFocuses` | Disable menu popping up when pressing the ALT key |
+| `browser.tabs.warnOnClose` | Disable confirmation prompt when closing a window with multiple tabs |
 | `browser.urlbar.openViewOnFocus` | Disable address bar popping out |
 | `browser.tabs.hoverPreview.enabled` | Disable tab previews when hovering over them |
+| `layout.word_select.eat_space_to_next_word` | Double-click word selection no longer includes the trailing space |
 
 ## Staying in sync with Betterfox
 

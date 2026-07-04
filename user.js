@@ -19,14 +19,37 @@
 /****************************************************************************
  * SECTION: FASTFOX                                                         *
 ****************************************************************************/
-user_pref("gfx.canvas.accelerated.cache-size", 256); // reset pref
-user_pref("gfx.webrender.layer-compositor", true);
+/** GENERAL ***/
+user_pref("gfx.content.skia-font-cache-size", 20);
+user_pref("content.notify.interval", 100000);
+
+/** GFX ***/
+user_pref("gfx.canvas.accelerated.cache-size", 512);
+
+/** JS ***/
+user_pref("javascript.options.baselinejit.threshold", 50);
+
+/** MEDIA CACHE ***/
+user_pref("media.cache_readahead_limit", 3600);
+user_pref("media.cache_resume_threshold", 1800);
+
+/** IMAGE CACHE ***/
+user_pref("image.mem.decode_bytes_at_a_time", 32768);
+
+/** NETWORKING ***/
+user_pref("network.buffer.cache.size", 65535);
+user_pref("network.buffer.cache.count", 48);
+user_pref("network.http.max-connections", 1800);
+user_pref("network.http.max-persistent-connections-per-server", 10);
+user_pref("network.http.max-urgent-start-excessive-connections-per-host", 5);
+user_pref("network.http.request.max-start-delay", 5);
+user_pref("network.dnsCacheExpiration", 3600);
 
 /****************************************************************************
  * SECTION: SECUREFOX                                                       *
 ****************************************************************************/
 /** TRACKING PROTECTION ***/
-user_pref("browser.contentblocking.category", "strict");
+user_pref("browser.contentblocking.category", "standard");
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
 user_pref("browser.uitour.enabled", false);
 user_pref("privacy.globalprivacycontrol.enabled", true);
@@ -42,7 +65,7 @@ user_pref("browser.xul.error_pages.expert_bad_cert", true);
 user_pref("security.tls.enable_0rtt_data", false);
 
 /** DISK AVOIDANCE ***/
-user_pref("browser.cache.disk.enable", false);
+user_pref("browser.cache.disk.enable", true);
 user_pref("browser.privatebrowsing.forceMediaMemoryCache", true);
 user_pref("media.memory_cache_max_size", 65536);
 user_pref("browser.sessionstore.interval", 60000);
@@ -62,7 +85,7 @@ user_pref("network.prefetch-next", false);
 user_pref("browser.urlbar.trimHttps", true);
 user_pref("browser.urlbar.untrimOnUserInteraction.featureGate", true);
 user_pref("browser.search.separatePrivateDefault.ui.enabled", true);
-user_pref("browser.search.suggest.enabled", false);
+user_pref("browser.search.suggest.enabled", true);
 user_pref("browser.urlbar.quicksuggest.enabled", false);
 user_pref("browser.urlbar.groupLabels.enabled", false);
 user_pref("browser.formfill.enable", false);
@@ -150,14 +173,6 @@ user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 user_pref("browser.compactmode.show", true);
 user_pref("browser.privateWindowSeparation.enabled", false); // WINDOWS
 
-/** AI ***/
-user_pref("browser.ai.control.default", "blocked");
-user_pref("browser.ml.enable", false);
-user_pref("browser.ml.chat.enabled", false);
-user_pref("browser.ml.chat.menu", false);
-user_pref("browser.tabs.groups.smart.enabled", false);
-user_pref("browser.ml.linkPreview.enabled", false);
-
 /** FULLSCREEN NOTICE ***/
 user_pref("full-screen-api.transition-duration.enter", "0 0");
 user_pref("full-screen-api.transition-duration.leave", "0 0");
@@ -173,23 +188,19 @@ user_pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
 user_pref("browser.newtabpage.activity-stream.showSponsored", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredCheckboxes", false);
 
-/** DOWNLOADS ***/
-// user_pref("browser.download.manager.addToRecentDocs", false); [CLEANFOX]
-
 /** PDF ***/
 user_pref("browser.download.open_pdf_attachments_inline", true);
 
 /** TAB BEHAVIOR ***/
 user_pref("browser.bookmarks.openInTabClosesMenu", false);
 user_pref("findbar.highlightAll", true);
-user_pref("browser.menu.showViewImageInfo", true);
 user_pref("layout.word_select.eat_space_to_next_word", false);
 
 /****************************************************************************
  * SECTION: CLEANFOX                                                        *
 ****************************************************************************/
 
-// Personal Preferences-----------------------
+/** PERSONAL PREFERENCES ***/
 user_pref("ui.key.menuAccessKeyFocuses", false);
 
 // Ask for confirmation when closing a window with multiple tabs
@@ -201,7 +212,18 @@ user_pref("browser.urlbar.openViewOnFocus", false);
 // Disable tab previews when hovering over them
 user_pref("browser.tabs.hoverPreview.enabled", false);
 
-// Try Yourself-----------------------
+/** TRY YOURSELF ***/
+// PREF: disable Firefox AI features
+// user_pref("browser.ai.control.default", "blocked");
+// user_pref("browser.ml.enable", false);
+// user_pref("browser.ml.chat.enabled", false);
+// user_pref("browser.ml.chat.menu", false);
+// user_pref("browser.tabs.groups.smart.enabled", false);
+// user_pref("browser.ml.linkPreview.enabled", false);
+
+// PREF: don't add downloads to the OS recent-files list
+// user_pref("browser.download.manager.addToRecentDocs", false);
+
 // PREF: disable all DRM content
 // user_pref("media.eme.enabled", false);
 
@@ -218,5 +240,5 @@ user_pref("browser.tabs.hoverPreview.enabled", false);
 // user_pref("geo.provider.use_geoclue", false); // [FF102+] [LINUX]
 
 /****************************************************************************
- * END CLEANFOX                                                             *
+ * END: CLEANFOX                                                            *
 ****************************************************************************/

@@ -21,28 +21,43 @@ HEADER_MOTTO = '"MithunWijayasiri"'
 HEADER_URL = "https://github.com/MithunWijayasiri/Cleanfox"
 HEADER_PREFIX = "// You can identify the features I've disabled in Betterfox by searching for the [#$] keyword."
 
-# FASTFOX is frozen: your trimmed version replaces upstream's entirely.
-FASTFOX_BODY = '''\
-user_pref("gfx.canvas.accelerated.cache-size", 256); // reset pref
-user_pref("gfx.webrender.layer-compositor", true);'''
-
 # Per-section overlays applied to upstream (keyed by pref name).
 OVERLAYS = {
-    "SECUREFOX": {"set": {}, "remove": [], "disable": [], "add": []},
+    "FASTFOX": {"set": {}, "remove": [], "disable": [], "add": []},
+    "SECUREFOX": {
+        "set": {
+            # Relax Betterfox defaults that hurt everyday UX.
+            "browser.contentblocking.category": '"standard"',  # strict breaks some sites
+            "browser.cache.disk.enable": "true",               # keep disk cache (faster repeat visits)
+            "browser.search.suggest.enabled": "true",          # keep address-bar suggestions
+        },
+        "remove": [],
+        "disable": [],
+        "add": [],
+    },
     "PESKYFOX": {
         "set": {},
-        "remove": [],
-        "disable": ["browser.download.manager.addToRecentDocs"],
+        # Moved to the footer TRY YOURSELF block (commented) — off by default.
+        "remove": [
+            "browser.ai.control.default",
+            "browser.ml.enable",
+            "browser.ml.chat.enabled",
+            "browser.ml.chat.menu",
+            "browser.tabs.groups.smart.enabled",
+            "browser.ml.linkPreview.enabled",
+            "browser.download.manager.addToRecentDocs",
+        ],
+        "disable": [],
         "add": [
-            ('browser.menu.showViewImageInfo', 'true'),
             ('layout.word_select.eat_space_to_next_word', 'false'),
         ],
     },
 }
 
-# Frozen CLEANFOX footer body (between the SECTION banner and END banner).
+# Frozen CLEANFOX footer body (between the SECTION and END banners).
+# Replaces upstream SMOOTHFOX + MY OVERRIDES placeholders (comments only, no prefs).
 FOOTER_BODY = '''
-// Personal Preferences-----------------------
+/** PERSONAL PREFERENCES ***/
 user_pref("ui.key.menuAccessKeyFocuses", false);
 
 // Ask for confirmation when closing a window with multiple tabs
@@ -54,7 +69,18 @@ user_pref("browser.urlbar.openViewOnFocus", false);
 // Disable tab previews when hovering over them
 user_pref("browser.tabs.hoverPreview.enabled", false);
 
-// Try Yourself-----------------------
+/** TRY YOURSELF ***/
+// PREF: disable Firefox AI features
+// user_pref("browser.ai.control.default", "blocked");
+// user_pref("browser.ml.enable", false);
+// user_pref("browser.ml.chat.enabled", false);
+// user_pref("browser.ml.chat.menu", false);
+// user_pref("browser.tabs.groups.smart.enabled", false);
+// user_pref("browser.ml.linkPreview.enabled", false);
+
+// PREF: don't add downloads to the OS recent-files list
+// user_pref("browser.download.manager.addToRecentDocs", false);
+
 // PREF: disable all DRM content
 // user_pref("media.eme.enabled", false);
 
@@ -72,6 +98,25 @@ user_pref("browser.tabs.hoverPreview.enabled", false);
 
 # --- PARSING --------------------------------------------------------------
 PREF_RE = re.compile(r'^(\s*)user_pref\("([^"]+)",\s*(.*?)\);(.*)$')
+SUBHEADER_RE = re.compile(r'^\s*/\*\*.*\*\*\*/\s*$')  # /** NAME ***/ subsection header
+
+
+def drop_empty_subsections(lines):
+    """Drop a /** NAME ***/ header (and its trailing blanks) if the overlay
+    removed every pref under it."""
+    out = []
+    i = 0
+    while i < len(lines):
+        if SUBHEADER_RE.match(lines[i]):
+            j = i + 1
+            while j < len(lines) and not SUBHEADER_RE.match(lines[j]):
+                j += 1
+            if not any(lines[k].strip() for k in range(i + 1, j)):
+                i = j
+                continue
+        out.append(lines[i])
+        i += 1
+    return out
 
 
 def marker_index(lines, name):
@@ -107,6 +152,7 @@ def apply_overlay(body, ov):
             out.append(f'{indent}user_pref("{key}", {ov["set"][key]});{trail}')
             continue
         out.append(line)
+    out = drop_empty_subsections(out)
     while out and not out[-1].strip():
         out.pop()
     for key, val in ov["add"]:
@@ -142,7 +188,9 @@ def build(upstream_text):
         f"url: {HEADER_URL}",
     )
 
-    fastfox = make_banner(width, "SECTION: FASTFOX") + FASTFOX_BODY.splitlines()
+    fastfox = make_banner(width, "SECTION: FASTFOX") + apply_overlay(
+        section_body(lines, "SECTION: FASTFOX", "SECTION: SECUREFOX"), OVERLAYS["FASTFOX"]
+    )
     securefox = make_banner(width, "SECTION: SECUREFOX") + apply_overlay(
         section_body(lines, "SECTION: SECUREFOX", "SECTION: PESKYFOX"), OVERLAYS["SECUREFOX"]
     )
@@ -153,7 +201,7 @@ def build(upstream_text):
         make_banner(width, "SECTION: CLEANFOX")
         + FOOTER_BODY.splitlines()
         + [""]
-        + make_banner(width, "END CLEANFOX")
+        + make_banner(width, "END: CLEANFOX")
     )
 
     blocks = [preamble, [HEADER_PREFIX, ""] + header, fastfox, securefox, peskyfox, footer]
